@@ -23,10 +23,12 @@ jobs:
         with:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
           always-auth: true
+          registry-url: 'https://registryvoltron.jfrog.io/artifactory/api/npm/npm/'
       
       - name: Check for npmrc files
         shell: bash
         run: |
+          cat .npmrc
           sudo cat /root/.npmrc
 
       # - name: Add .npmrc file
