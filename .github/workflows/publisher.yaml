@@ -26,11 +26,15 @@ jobs:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
           always-auth: true
           registry-url: 'https://registryvoltron.jfrog.io/artifactory/api/npm/npm/'
-      
-      - name: Check for npmrc files
+          
+      - name: Check Yarn CLI
         shell: bash
-        run: |
-          cat /home/runner/work/_temp/.npmrc
+        run: yarn --version
+      
+#       - name: Check for npmrc files
+#         shell: bash
+#         run: |
+#           cat /home/runner/work/_temp/.npmrc
 
       # - name: Add .npmrc file
       #   shell: bash
@@ -44,14 +48,14 @@ jobs:
       #   run: |
       #     echo PKG_VERSION=$(echo "v1.0.1-bld.${{ github.run_number }}") >> $GITHUB_ENV
           
-      - name: Install NPM dependencies and build App package
-        shell: bash
-        run: |
-          npm install -g yarn
-          yarn --network-concurrency 1 install
-          yarn run build
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#       - name: Install NPM dependencies and build App package
+#         shell: bash
+#         run: |
+#           npm install -g yarn
+#           yarn --network-concurrency 1 install
+#           yarn run build
+#         env:
+#           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Versioning the artifact
       #   shell: bash
