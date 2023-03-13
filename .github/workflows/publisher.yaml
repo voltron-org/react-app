@@ -28,8 +28,7 @@ jobs:
       - name: Check for npmrc files
         shell: bash
         run: |
-          cat .npmrc
-          sudo cat /root/.npmrc
+          cat /home/runner/work/_temp/.npmrc
 
       # - name: Add .npmrc file
       #   shell: bash
