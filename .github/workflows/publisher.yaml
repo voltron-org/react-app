@@ -27,7 +27,6 @@ jobs:
       - name: Check for npmrc files
         shell: bash
         run: |
-          cat /root/.npmrc
           cat .npmrc
 
       # - name: Add .npmrc file
