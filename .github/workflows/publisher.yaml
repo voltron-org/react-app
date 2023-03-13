@@ -1,0 +1,56 @@
+name: Registry Publisher
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  Publish: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+      - name: Read .nvmrc from CodeBase
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+        id: nvm
+
+      - name: Use Node.js ${{ steps.nvm.outputs.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+          always-auth: true
+
+      - name: Add .npmrc file
+        shell: bash
+        run: |
+          echo -e "always-auth=true\nunsafe-perm=true\n//registryvoltron.jfrog.io/artifactory/api/npm/npm/:_authToken=${NPM_TOKEN}" | sudo tee /root/.npmrc > /dev/null
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Generate Package Version
+        shell: bash
+        run: |
+          echo PKG_VERSION=$(echo "v1.0.1-bld.${{ github.run_number }}") >> $GITHUB_ENV
+          
+      - name: Install NPM dependencies and build App package
+        shell: bash
+        run: |
+          npm install -g yarn
+          yarn --network-concurrency 1 install
+          yarn run build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Versioning the artifact
+        shell: bash
+        run: |
+          npm -f --no-git-tag-version version ${{ env.PKG_VERSION }}
+
+      - name: Publish artifact to Nexus Registry
+        shell: bash
+        run: yarn publish
+        
