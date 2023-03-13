@@ -27,7 +27,7 @@ jobs:
       - name: Add .npmrc file
         shell: bash
         run: |
-          echo -e "//registryvoltron.jfrog.io/artifactory/api/npm/npm/:_authToken=${NPM_TOKEN}\nalways-auth=true\nunsafe-perm=true" | sudo tee /root/.npmrc > /dev/null
+          echo -e "//registryvoltron.jfrog.io/artifactory/api/npm/npm/:_authToken=${NPM_TOKEN}\nalways-auth=true\nemail=mohd@xenonstack.com" | sudo tee /root/.npmrc > /dev/null
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       
