@@ -23,35 +23,41 @@ jobs:
         with:
           node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
           always-auth: true
-
-      - name: Add .npmrc file
-        shell: bash
-        run: |
-          echo -e "//registryvoltron.jfrog.io/artifactory/api/npm/npm/:_authToken=${NPM_TOKEN}\nalways-auth=true\nemail=mohd@xenonstack.com" | sudo tee /root/.npmrc > /dev/null
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - name: Generate Package Version
+      - name: Check for npmrc files
         shell: bash
         run: |
-          echo PKG_VERSION=$(echo "v1.0.1-bld.${{ github.run_number }}") >> $GITHUB_ENV
+          cat /root/.npmrc
+          cat .npmrc
+
+      # - name: Add .npmrc file
+      #   shell: bash
+      #   run: |
+      #     echo -e "//registryvoltron.jfrog.io/artifactory/api/npm/npm/:_authToken=${NPM_TOKEN}\nalways-auth=true\nemail=mohd@xenonstack.com" | sudo tee /root/.npmrc > /dev/null
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      # - name: Generate Package Version
+      #   shell: bash
+      #   run: |
+      #     echo PKG_VERSION=$(echo "v1.0.1-bld.${{ github.run_number }}") >> $GITHUB_ENV
           
-      - name: Install NPM dependencies and build App package
-        shell: bash
-        run: |
-          npm install -g yarn
-          yarn --network-concurrency 1 install
-          yarn run build
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Install NPM dependencies and build App package
+      #   shell: bash
+      #   run: |
+      #     npm install -g yarn
+      #     yarn --network-concurrency 1 install
+      #     yarn run build
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Versioning the artifact
-        shell: bash
-        run: |
-          npm -f --no-git-tag-version version ${{ env.PKG_VERSION }}
+      # - name: Versioning the artifact
+      #   shell: bash
+      #   run: |
+      #     npm -f --no-git-tag-version version ${{ env.PKG_VERSION }}
 
-      - name: Publish artifact to Nexus Registry
-        shell: bash
-        run: yarn publish
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Publish artifact to Nexus Registry
+      #   shell: bash
+      #   run: yarn publish
+      #   env:
+      #     NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
