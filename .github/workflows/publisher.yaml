@@ -44,14 +44,14 @@ jobs:
       #   run: |
       #     echo PKG_VERSION=$(echo "v1.0.1-bld.${{ github.run_number }}") >> $GITHUB_ENV
           
-      # - name: Install NPM dependencies and build App package
-      #   shell: bash
-      #   run: |
-      #     npm install -g yarn
-      #     yarn --network-concurrency 1 install
-      #     yarn run build
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install NPM dependencies and build App package
+        shell: bash
+        run: |
+          npm install -g yarn
+          yarn --network-concurrency 1 install
+          yarn run build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Versioning the artifact
       #   shell: bash
