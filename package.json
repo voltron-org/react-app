@@ -1,6 +1,6 @@
 {
   "name": "business-card-react-app",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "type": "commonjs",
   "scripts": {
     "dev": "vite",
